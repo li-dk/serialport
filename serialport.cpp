@@ -258,13 +258,17 @@ void SerialPort::slotSendData()
 //数据接收槽函数
 void SerialPort::slotReceiveData()
 {
-    QByteArray byteReceive = m_pSerialPort->readAll();
     QDateTime datatime;
+    QString strReceive;
+    QByteArray byteReceive = m_pSerialPort->readAll();
+    QString strTmp = byteReceive.toHex();
+    for (int i = 0; i < strTmp.length(); i += 2)
+        strReceive += strTmp.mid(i, 2) + " ";
 
     if (ui->radioButtonHex->isChecked())
     {
         ui->textEditInfo->append(datatime.currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]")
-                                + " Recv Hex: " + '\n' + byteReceive.toHex() + '\n');
+                                + " Recv Hex: " + '\n' + strReceive + '\n');
     } else {
         ui->textEditInfo->append(datatime.currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]")
                                 + " Recv Ascii: " + '\n' + byteReceive + '\n');
